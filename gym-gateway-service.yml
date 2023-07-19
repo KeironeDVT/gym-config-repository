@@ -1,0 +1,46 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: gym-manager-equipment-service
+          uri: http://localhost:9000
+          predicates:
+            - Path=/gym/equipment
+          filters:
+            - RewritePath=/gym/equipment, /equipment
+        -   id: gym-manager-equipment-service-id
+            uri: http://localhost:9000
+            predicates:
+              - Path=/gym/equipment/**
+            filters:
+              - RewritePath=/gym/equipment/(?<ID>.*), /equipment/$\{ID}
+        - id: gym-manager-member-service
+          uri: http://localhost:8000
+          predicates:
+            - Path=/gym/members
+          filters:
+            - RewritePath=/gym/members, /members
+        -   id: gym-manager-member-service-id
+            uri: http://localhost:8000
+            predicates:
+              - Path=/gym/members/**
+            filters:
+              - RewritePath=/gym/members/(?<ID>.*), /members/$\{ID}
+        - id: gym-manager-member-service-equipment-suggestions
+          uri: http://localhost:8000
+          predicates:
+            - Path=/gym/members/{segment}/equipment-suggestion
+          filters:
+            - SetPath=/gym/members/{segment}/equipment-suggestion, /members/{segment}/equipment-suggestion
+        - id: gym-manager-member-service-search
+          uri: http://localhost:8000
+          predicates:
+            - Path=/gym/members/search
+          filters:
+            - RewritePath=/gym/members/search, /members/search
+        - id: gym-manager-analysis-service
+          uri: http://localhost:8050
+          predicates:
+            - Path=/gym/analysis
+          filters:
+            - RewritePath=/gym/analysis, /analysis
