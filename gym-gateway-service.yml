@@ -44,3 +44,8 @@ spring:
             - Path=/gym/analysis
           filters:
             - RewritePath=/gym/analysis, /analysis
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
